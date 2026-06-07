@@ -66,13 +66,13 @@ def main(stdscr):
     playing = True
     while playing:
         try:
-            char = stdscr.getkey()
+            key = stdscr.getkey()
         except:
-            char = ""
-        if char == "q":
+            key = ""
+        if key == "q":
             playing = False
-        elif char in "wasd":
-            move(char)
+        elif key in "wasd":
+            move(key)
         draw()
     stdscr.refresh()
 
