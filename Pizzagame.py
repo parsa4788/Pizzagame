@@ -1,6 +1,7 @@
 import curses
 import random
 
+
 def main(stdscr):
     curses.noecho()
     curses.cbreak()
@@ -13,6 +14,7 @@ def main(stdscr):
     height -= 1
     width -= 1
     world = []
+    food = []
 
     def random_place():
         a = random.randint(0, height - 1)
@@ -24,6 +26,7 @@ def main(stdscr):
 
     curses.init_pair(1, curses.COLOR_BLUE, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_WHITE)
 
     def in_range(num, min, max):
         if num > max:
@@ -40,12 +43,19 @@ def main(stdscr):
                 world[i].append("#" if random.random() < 0.03 else " ")
         player_l, player_c = random_place()
         stdscr.addch(player_l, player_c, "P", curses.color_pair(1))
+        for i in range(10):
+            fl, fc = random_place()
+            fa = random.randint(1000, 10000)
+            food.append((fl, fc, fa))
 
     def draw():
         for i in range(height):
             for j in range(width):
                 stdscr.addch(i, j, world[i][j], curses.color_pair(2))
         stdscr.addch(player_l, player_c, "P", curses.color_pair(1))
+        for f in food:
+            fl, fc, fa = f
+            stdscr.addstr(fl, fc, "*", curses.color_pair(3))
 
     def move(c):
         global player_l, player_c
