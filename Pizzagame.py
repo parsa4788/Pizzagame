@@ -2,6 +2,10 @@ import curses
 import random
 import time
 
+enemy_number = 2
+food_number = 10
+enemy_move_chance = 0.5
+
 
 def main(stdscr):
     curses.noecho()
@@ -43,15 +47,34 @@ def main(stdscr):
                 nfa = random.randint(1000, 10000)
                 food[i] = (nfl, nfc, nfa)
 
+    def move_enemy(l, c):
+        if random.random() > enemy_move_chance:
+            if player_l > l:
+                l += 1
+            if random.random() > enemy_move_chance:
+                if player_l < l:
+                    l -= 1
+            if random.random() > enemy_move_chance:
+                if player_c > c:
+                    c += 1
+            if random.random() > enemy_move_chance:
+                if player_c < c:
+                    c -= 1
+        return l, c
+
     def on_enemy():
         global playing
         for i in range(len(enemy)):
-            el, ec = enemy[i]
-            if el == player_l and ec == player_c:
+            l, c = enemy[i]
+            l, c = move_enemy(l, c)
+            l = in_range(l, 0, height - 2)
+            c = in_range(c, 0, width - 1)
+            if l == player_l and c == player_c:
                 stdscr.addstr(height // 2, (width // 2) - 7, "YOU DIDE, SIR.")
                 stdscr.refresh()
                 time.sleep(3)
                 playing = False
+            enemy[i] = (l, c)
 
     def check_score():
         global score
@@ -71,11 +94,11 @@ def main(stdscr):
                 world[i].append("#" if random.random() < 0.03 else " ")
         player_l, player_c = random_place()
         stdscr.addch(player_l, player_c, "P", curses.color_pair(1))
-        for i in range(10):
+        for i in range(food_number):
             fl, fc = random_place()
             fa = random.randint(1000, 10000)
             food.append((fl, fc, fa))
-        for i in range(random.randint(10, 25)):
+        for i in range(enemy_number):
             el, ec = random_place()
             enemy.append((el, ec))
 
@@ -109,6 +132,8 @@ def main(stdscr):
     init()
     draw()
     while playing:
+        on_enemy()
+        draw()
         try:
             key = stdscr.getkey()
         except:
@@ -117,10 +142,8 @@ def main(stdscr):
             playing = False
         elif key in "wasd":
             move(key)
-            on_enemy()
             eat_food()
-
-        draw()
+        time.sleep(0.05)
     stdscr.refresh()
 
 
