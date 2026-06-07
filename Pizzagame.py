@@ -1,6 +1,7 @@
 import curses
 import random
 
+
 def main(stdscr):
     curses.noecho()
     curses.cbreak()
@@ -33,8 +34,8 @@ def main(stdscr):
         return num
 
     def init():
-        global player_l , player_c
-        for i in range(-1, height + 1):
+        global player_l, player_c
+        for i in range(0, height + 1):
             world.append([])
             for j in range(-1, width + 1):
                 world[i].append("#" if random.random() < 0.03 else " ")
