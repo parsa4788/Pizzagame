@@ -1,7 +1,6 @@
 import curses
 import random
 
-
 def main(stdscr):
     curses.noecho()
     curses.cbreak()
