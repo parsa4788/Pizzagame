@@ -1,9 +1,6 @@
 import curses
 import random
 
-global player_l, player_c
-
-
 def main(stdscr):
     curses.noecho()
     curses.cbreak()
@@ -36,10 +33,11 @@ def main(stdscr):
         return num
 
     def init():
+        global player_l , player_c
         for i in range(-1, height + 1):
             world.append([])
             for j in range(-1, width + 1):
-                world[i].append("#" if random.random() < 0.02 else " ")
+                world[i].append("#" if random.random() < 0.03 else " ")
         player_l, player_c = random_place()
         stdscr.addch(player_l, player_c, "P", curses.color_pair(1))
 
